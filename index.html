@@ -1,282 +1,161 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday 🎂</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sahana Birthday Deluxe Edition</title>
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
-}
-
-body{
-background:linear-gradient(135deg,#07111f,#151b3a,#25134b);
-color:white;
-overflow-x:hidden;
-}
-
-.page{
-min-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-padding:40px;
-text-align:center;
-}
-
-.glass{
-background:rgba(255,255,255,0.08);
-backdrop-filter:blur(12px);
-border:1px solid rgba(255,255,255,0.15);
-border-radius:24px;
-padding:30px;
-max-width:800px;
-width:100%;
-}
-
-h1{
-font-size:3rem;
-margin-bottom:20px;
-}
-
-h2{
-margin-bottom:20px;
-}
-
-p{
-line-height:1.8;
-}
-
-.btn{
-padding:14px 24px;
-margin:10px;
-border:none;
-border-radius:30px;
-cursor:pointer;
-font-size:1rem;
-background:#8b5cf6;
-color:white;
-transition:.3s;
-}
-
-.btn:hover{
-transform:translateY(-3px);
-}
-
-.timeline-card,
-.memory-card,
-.achievement{
-background:rgba(255,255,255,0.08);
-padding:18px;
-margin:12px;
-border-radius:18px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:16px;
-width:100%;
-}
-
-.hidden{
-display:none;
-}
-
-.special{
-color:#ffb7ff;
-}
-
-footer{
-padding:40px;
-text-align:center;
-opacity:.8;
-}
+body{margin:0;font-family:Segoe UI,sans-serif;background:linear-gradient(135deg,#07111f,#151b3a,#25134b);color:#fff;overflow-x:hidden}
+canvas{position:fixed;inset:0;z-index:-1}
+section{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
+.card{background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.15);border-radius:24px;padding:30px;max-width:950px;width:100%}
+.center{text-align:center}
+.btn{padding:12px 22px;border:none;border-radius:999px;background:#8b5cf6;color:#fff;cursor:pointer;margin:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.box{background:rgba(255,255,255,.08);padding:16px;border-radius:16px}
+.photo{height:180px;display:flex;align-items:center;justify-content:center;border:2px dashed rgba(255,255,255,.4)}
+.hidden{display:none}
+#popup{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);align-items:center;justify-content:center;padding:20px}
+#popupInner{background:#121a33;padding:24px;border-radius:18px;max-width:650px}
+.toast{display:none;position:fixed;right:20px;top:20px;background:#1f2937;padding:12px;border-radius:12px}
 </style>
 </head>
-
 <body>
+<canvas id="bg"></canvas>
+<div id="toast" class="toast"></div>
 
-<section class="page" id="landing">
-<div class="glass">
-<h1>Happy Birthday 🎂</h1>
-
-<p>
-I made something for you.<br>
-Because a normal birthday message felt too boring. 🤭
-</p>
-
+<section>
+<div class="card center">
+<h1>Happy Birthday, Sahana 🎂</h1>
+<p>I made something for you.<br>Because a normal birthday message felt too boring. 🤭</p>
 <br>
-
-<button class="btn" onclick="startAdventure()">
-Begin Adventure ✨
-</button>
-
-<button class="btn" onclick="notInterested()">
-Not Interested 😑
-</button>
-
+<button class="btn" onclick="startAdventure()">Begin Adventure ✨</button>
+<button class="btn" onclick="notInterested()">Not Interested 😑</button>
 <p id="joke"></p>
 </div>
 </section>
 
-<div id="content" class="hidden">
-
-<section class="page">
-<div class="glass">
+<section>
+<div class="card">
 <h2>📅 Origin Story</h2>
-
-<div class="timeline-card">
-🏸 Two people playing badminton.
-</div>
-
-<div class="timeline-card">
-👧 Someone asks:
-"How much does the membership cost?"
-</div>
-
-<div class="timeline-card">
-🧑 New teammate unlocked.
-</div>
-
-<div class="timeline-card">
-✨ And the story began.
-</div>
+<div class="box">🏸 Two people playing badminton.</div><br>
+<div class="box">👧 Someone asks about membership.</div><br>
+<div class="box">🧑 New teammate unlocked.</div><br>
+<div class="box">✨ And the story began.</div>
 </div>
 </section>
 
-<section class="page">
-<div class="glass">
+<section>
+<div class="card center">
 <h2>🎮 Player Profile</h2>
-
-<p><strong>Name:</strong> [Her Name]</p>
-<p><strong>Role:</strong> Unexpectedly Cool Human</p>
-
-<br>
-
+<p>Name: Sahana</p>
+<p>Role: Unexpectedly Cool Human</p><br>
 <p>🎵 Good Music Taste</p>
 <p>🏸 Badminton Player</p>
 <p>🤭 Replies Despite Being A Dry Texter</p>
-<p>🔮 Causes Random Birthday Predictions</p>
-
-<br>
-
-<p>
-Danger Level:
-⭐⭐⭐⭐⭐
-</p>
+<p>🔮 Causes Random Birthday Predictions</p><br>
+<p>Danger Level ⭐⭐⭐⭐⭐</p>
 </div>
 </section>
 
-<section class="page">
-<div class="glass">
-<h2>📖 Memory Gallery</h2>
-
+<section>
+<div class="card">
+<h2>📸 Memory Gallery</h2>
 <div class="grid">
-
-<div class="memory-card">
-🏸 First Games
+<div class="box photo">PHOTO SLOT 1</div>
+<div class="box photo">PHOTO SLOT 2</div>
+<div class="box photo">PHOTO SLOT 3</div>
+<div class="box photo">PHOTO SLOT 4</div>
 </div>
-
-<div class="memory-card">
-🥤 Juice Day
-</div>
-
-<div class="memory-card">
-✈️ Bangalore Arc
-</div>
-
-<div class="memory-card">
-🎂 Birthday Radar Incident
-</div>
-
+<br>
+<div class="grid">
+<div class="box" onclick="story('🏸 First Games','It all started with badminton.')">🏸 First Games</div>
+<div class="box" onclick="story('🥤 Juice Day','One juice. One unforgettable memory.')">🥤 Juice Day</div>
+<div class="box" onclick="story('✈️ Bangalore Arc','Different city. Same conversations.')">✈️ Bangalore Arc</div>
+<div class="box" onclick="story('🎂 Birthday Radar','Asked at random. Birthday was two days away.')">🎂 Birthday Radar</div>
 </div>
 </div>
 </section>
 
-<section class="page">
-<div class="glass">
-<h2>🏆 Achievements Unlocked</h2>
-
-<div class="achievement">
-🏆 Met At The Court
-</div>
-
-<div class="achievement">
-🏆 Survived Bangalore Distance
-</div>
-
-<div class="achievement">
-🏆 Birthday Detected
-</div>
-
-<div class="achievement">
-🏆 Still Replies To Messages
-</div>
-
-<div class="achievement">
-🏆 Certified Good Human
-</div>
-
+<section>
+<div class="card">
+<h2>🏆 Achievements</h2>
+<div class="box">🏆 Met At The Court</div><br>
+<div class="box">🏆 Survived Bangalore Distance</div><br>
+<div class="box">🏆 Birthday Detected</div><br>
+<div class="box">🏆 Still Replies To Messages</div><br>
+<div class="box">🏆 Certified Good Human</div>
 </div>
 </section>
 
-<section class="page">
-<div class="glass">
-<h2 class="special">💙 Final Message</h2>
-
-<p>
-Thank you for being one of the nicest surprises in my life this year.
-</p>
-
-<br>
-
-<p>
-From badminton games to random conversations,
-you've made life a little brighter.
-</p>
-
-<br>
-
-<p>
-I hope this year brings you happiness,
-success, great memories,
-and plenty of reasons to smile.
-</p>
-
-<br>
-
+<section>
+<div class="card center">
+<h2>💙 Final Message</h2>
+<p>Thank you for being one of the nicest surprises in my life this year.</p><br>
+<p>From badminton games to random conversations, you've made life a little brighter.</p><br>
+<p>I hope this year brings you happiness, success, unforgettable memories, and countless reasons to smile.</p><br>
 <h2>Happy Birthday 🎂💙</h2>
-
 </div>
 </section>
 
-<footer>
-Made with way too much effort 🤣🏸
-</footer>
-
+<div id="popup">
+<div id="popupInner">
+<h2 id="pt"></h2>
+<p id="pc"></p>
+</div>
 </div>
 
 <script>
 function startAdventure(){
-document.getElementById("content").classList.remove("hidden");
-window.scrollTo({
-top:window.innerHeight,
-behavior:"smooth"
-});
+toast('Adventure Started ✨');
+confetti();
+window.scrollTo({top:window.innerHeight,behavior:'smooth'});
 }
-
 function notInterested(){
-document.getElementById("joke").innerHTML =
-"Too late, you're already here 🤣";
+document.getElementById('joke').innerText='Too late, you are already here 🤣';
 setTimeout(startAdventure,1200);
 }
-</script>
+function story(t,c){
+document.getElementById('pt').innerText=t;
+document.getElementById('pc').innerText=c;
+document.getElementById('popup').style.display='flex';
+}
+document.getElementById('popup').onclick=()=>document.getElementById('popup').style.display='none';
 
+function toast(t){
+let x=document.getElementById('toast');
+x.innerText=t;x.style.display='block';
+setTimeout(()=>x.style.display='none',2500);
+}
+function confetti(){
+for(let i=0;i<60;i++){
+let d=document.createElement('div');
+d.style.position='fixed';
+d.style.left=Math.random()*100+'vw';
+d.style.top='0';
+d.style.width='8px';
+d.style.height='8px';
+d.style.background='hsl('+Math.random()*360+',100%,70%)';
+d.style.transition='all 3s linear';
+document.body.appendChild(d);
+requestAnimationFrame(()=>{
+d.style.transform='translateY(100vh) rotate(720deg)';
+d.style.opacity='0';
+});
+setTimeout(()=>d.remove(),3000);
+}
+}
+const c=document.getElementById('bg'),ctx=c.getContext('2d');
+function rs(){c.width=innerWidth;c.height=innerHeight}
+rs();addEventListener('resize',rs);
+let p=[...Array(80)].map(()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1}));
+(function a(){
+ctx.clearRect(0,0,c.width,c.height);
+ctx.fillStyle='rgba(255,255,255,.5)';
+p.forEach(o=>{ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,6.28);ctx.fill();o.y-=.3;if(o.y<0)o.y=c.height;});
+requestAnimationFrame(a);
+})();
+</script>
 </body>
 </html>
