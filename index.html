@@ -1,94 +1,668 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Sahana - Ultimate Birthday Experience</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Segoe UI,sans-serif;background:linear-gradient(135deg,#050b18,#151b3a,#2b1454);color:#fff;overflow-x:hidden}
-canvas#bg{position:fixed;inset:0;z-index:-2}
-#loader{position:fixed;inset:0;background:#050b18;display:flex;align-items:center;justify-content:center;font-size:2rem;z-index:9999}
-section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-.card{background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.15);border-radius:24px;padding:30px;max-width:1000px;width:100%}
-.center{text-align:center}
-.btn{padding:12px 22px;border:none;border-radius:999px;background:#8b5cf6;color:white;cursor:pointer;margin:6px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
-.box{background:rgba(255,255,255,.08);padding:16px;border-radius:16px}
-.photo{height:220px;display:flex;align-items:center;justify-content:center;border:2px dashed rgba(255,255,255,.4)}
-.reveal{opacity:0;transform:translateY(40px);transition:1s}
-.reveal.show{opacity:1;transform:none}
-#music{position:fixed;top:10px;right:10px}
-#popup{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);align-items:center;justify-content:center;padding:20px}
-#popupInner{background:#121a33;padding:24px;border-radius:18px;max-width:650px}
-.toast{display:none;position:fixed;right:20px;top:20px;background:#1f2937;padding:12px;border-radius:12px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sahana - Ultimate Birthday Experience</title>
+    <style>
+        :root {
+            --navy: #0a0f2c;
+            --deep-purple: #4c1d95;
+            --purple: #8b5cf6;
+            --pink: #ec4899;
+            --glass: rgba(255,255,255,0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0a0f2c, #1a1f4d, #2b1454);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        canvas#bg {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+        }
+        
+        #loader, #transition {
+            position: fixed;
+            inset: 0;
+            background: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            font-weight: 600;
+            z-index: 9999;
+            color: white;
+            transition: opacity 1s ease;
+        }
+        
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+        
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 28px;
+            padding: 40px;
+            max-width: 1000px;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        
+        .center {
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(90deg, #c084fc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+            line-height: 1.1;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 9999px;
+            background: linear-gradient(90deg, var(--purple), var(--pink));
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 20px 25px -5px rgba(139, 92, 246, 0.4);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+        
+        .box {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 24px;
+            border-radius: 20px;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+        
+        .box:hover {
+            transform: translateY(-8px);
+            background: rgba(255,255,255,0.12);
+            border-color: var(--purple);
+        }
+        
+        .photo {
+            height: 260px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px dashed rgba(236, 72, 153, 0.4);
+            border-radius: 20px;
+            font-size: 1.1rem;
+            color: #ddd;
+            transition: all 0.4s ease;
+            overflow: hidden;
+        }
+        
+        .photo:hover {
+            border-style: solid;
+            border-color: var(--pink);
+            transform: scale(1.03);
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+        
+        .reveal.show {
+            opacity: 1;
+            transform: none;
+        }
+        
+        #music {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 12px 20px;
+            font-size: 1.4rem;
+        }
+        
+        #popup {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 15, 44, 0.85);
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(8px);
+        }
+        
+        #popupInner {
+            background: #1a1f4d;
+            padding: 40px;
+            border-radius: 24px;
+            max-width: 620px;
+            border: 1px solid var(--purple);
+            box-shadow: 0 0 60px rgba(139, 92, 246, 0.5);
+        }
+        
+        .toast {
+            display: none;
+            position: fixed;
+            right: 30px;
+            top: 30px;
+            background: linear-gradient(90deg, #1e2937, #334155);
+            padding: 16px 24px;
+            border-radius: 16px;
+            border-left: 5px solid var(--pink);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            z-index: 3000;
+            font-weight: 500;
+        }
+        
+        .achievement-unlock {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--purple), #a855f7);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 9999px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 2500;
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+        }
+        
+        .cursor-trail {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.7;
+            transition: all 0.1s linear;
+        }
+    </style>
 </head>
 <body>
-<div id="loader">🎬 Loading Birthday Adventure...</div>
-<canvas id="bg"></canvas>
-<button id="music" class="btn">🎵 Music Toggle</button>
-<div id="toast" class="toast"></div>
+    <!-- Transition -->
+    <div id="transition">
+        ✨ Loading Memories...
+    </div>
 
-<section>
-<div class="card center reveal">
-<h1 id="title"></h1>
-<p id="subtitle"></p><br>
-<div id="countdown"></div><br>
-<button class="btn" onclick="begin()">Begin Adventure ✨</button>
-<button class="btn" onclick="nope()">Not Interested 😑</button>
-<p id="joke"></p>
-</div>
-</section>
+    <!-- Background Canvas -->
+    <canvas id="bg"></canvas>
 
-<section><div class="card reveal"><h2>📅 Origin Story</h2><div class="box">🏸 Two people playing badminton.</div><br><div class="box">👧 Membership question asked.</div><br><div class="box">🧑 New teammate unlocked.</div><br><div class="box">✨ A memorable chapter began.</div></div></section>
+    <!-- Music Button -->
+    <button id="music" class="btn">🎵 Music</button>
 
-<section><div class="card center reveal"><h2>🎮 Player Profile</h2><p><b>Sahana</b> — Unexpectedly Cool Human</p><br><p>🎵 Music Taste</p><p>🏸 Badminton Player</p><p>🤭 Dry Texter (Allegedly)</p><p>🔮 Birthday Prediction Catalyst</p></div></section>
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
 
-<section><div class="card reveal"><h2>📸 Gallery</h2><div class="grid"><div class="box photo">PHOTO SLOT 1</div><div class="box photo">PHOTO SLOT 2</div><div class="box photo">PHOTO SLOT 3</div><div class="box photo">PHOTO SLOT 4</div></div></div></section>
+    <!-- Achievement Unlock -->
+    <div id="achievementToast" class="achievement-unlock">
+        🏆 Achievement Unlocked!
+    </div>
 
-<section><div class="card reveal"><h2>📖 Memories</h2><div class="grid">
-<div class="box" onclick="story('🏸 First Games','It all started with badminton.')">🏸 First Games</div>
-<div class="box" onclick="story('🥤 Juice Day','One juice. One unforgettable memory.')">🥤 Juice Day</div>
-<div class="box" onclick="story('✈️ Bangalore Arc','Different city. Same conversations.')">✈️ Bangalore Arc</div>
-<div class="box" onclick="story('🎂 Birthday Radar','Asked randomly. Birthday was two days away.')">🎂 Birthday Radar</div>
-</div></div></section>
+    <!-- Landing Section -->
+    <section id="landing">
+        <div class="card center reveal">
+            <h1 id="title"></h1>
+            <p id="subtitle" class="subtitle"></p>
+            <br><br>
+            <div id="countdown" style="font-size:1.3rem; margin:20px 0; opacity:0.9;"></div>
+            <button class="btn" onclick="beginAdventure()">Begin Adventure ✨</button>
+            <button class="btn" onclick="nope()">Not Interested 😑</button>
+            <p id="joke" style="margin-top:20px; min-height:28px;"></p>
+        </div>
+    </section>
 
-<section><div class="card reveal"><h2>🏆 Achievements</h2><div class="box">🏆 Met At The Court</div><br><div class="box">🏆 Survived Bangalore Distance</div><br><div class="box">🏆 Birthday Detected</div><br><div class="box">🏆 Certified Good Human</div></div></section>
+    <!-- Adventure Content (Hidden initially) -->
+    <div id="adventure" style="display:none;">
 
-<section><div class="card center reveal"><h2>💙 Final Message</h2><p>Thank you for being one of the nicest surprises this year.</p><br><p>From badminton games to random conversations, you've made life brighter.</p><br><h2>Happy Birthday, Sahana 🎂💙</h2></div></section>
+        <!-- Origin Story -->
+        <section>
+            <div class="card reveal">
+                <h2 style="text-align:center; margin-bottom:30px; font-size:2.2rem; color:#c4b5fd;">📅 Origin Story</h2>
+                <div class="grid">
+                    <div class="box">🏸 Two people playing badminton</div>
+                    <div class="box">👧 Membership fee question asked</div>
+                    <div class="box">🧑 New teammate unlocked</div>
+                    <div class="box">✨ A memorable chapter began</div>
+                </div>
+            </div>
+        </section>
 
-<div id="popup"><div id="popupInner"><h2 id="pt"></h2><p id="pc"></p></div></div>
+        <!-- Player Profile -->
+        <section>
+            <div class="card center reveal">
+                <h2 style="margin-bottom:30px; font-size:2.2rem;">🎮 Player Profile</h2>
+                <h3 style="font-size:2.4rem; margin-bottom:8px; color:#e0bbff;">Sahana</h3>
+                <p style="font-size:1.4rem; opacity:0.9; margin-bottom:30px;">Unexpectedly Cool Human</p>
+                
+                <div style="text-align:left; max-width:520px; margin:0 auto;">
+                    <div style="margin:18px 0;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                            <span>🎵 Music Taste</span>
+                            <span>100%</span>
+                        </div>
+                        <div style="height:8px; background:rgba(255,255,255,0.1); border-radius:999px; overflow:hidden;">
+                            <div style="width:95%; height:100%; background:linear-gradient(90deg, #a855f7, #ec4899);"></div>
+                        </div>
+                    </div>
+                    <div style="margin:18px 0;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                            <span>🏸 Badminton Player</span>
+                            <span>92%</span>
+                        </div>
+                        <div style="height:8px; background:rgba(255,255,255,0.1); border-radius:999px; overflow:hidden;">
+                            <div style="width:92%; height:100%; background:linear-gradient(90deg, #a855f7, #ec4899);"></div>
+                        </div>
+                    </div>
+                    <div style="margin:18px 0;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                            <span>🤭 Dry Texter (Allegedly)</span>
+                            <span>88%</span>
+                        </div>
+                        <div style="height:8px; background:rgba(255,255,255,0.1); border-radius:999px; overflow:hidden;">
+                            <div style="width:88%; height:100%; background:linear-gradient(90deg, #a855f7, #ec4899);"></div>
+                        </div>
+                    </div>
+                    <div style="margin:18px 0;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                            <span>🔮 Birthday Radar</span>
+                            <span>99%</span>
+                        </div>
+                        <div style="height:8px; background:rgba(255,255,255,0.1); border-radius:999px; overflow:hidden;">
+                            <div style="width:99%; height:100%; background:linear-gradient(90deg, #a855f7, #ec4899);"></div>
+                        </div>
+                    </div>
+                    <div style="margin:18px 0;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                            <span>✨ Makes Days Brighter</span>
+                            <span>∞</span>
+                        </div>
+                        <div style="height:8px; background:rgba(255,255,255,0.1); border-radius:999px; overflow:hidden;">
+                            <div style="width:100%; height:100%; background:linear-gradient(90deg, #a855f7, #ec4899);"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top:30px; font-size:1.3rem;">
+                    Danger Level: <span style="color:#f472b6;">⭐⭐⭐⭐⭐</span>
+                </div>
+            </div>
+        </section>
 
-<script>
-setTimeout(()=>document.getElementById('loader').style.display='none',1800);
+        <!-- Gallery -->
+        <section>
+            <div class="card reveal">
+                <h2 style="text-align:center; margin-bottom:30px; font-size:2.2rem;">📸 Gallery</h2>
+                <div class="grid">
+                    <div class="box photo">PHOTO SLOT 1</div>
+                    <div class="box photo">PHOTO SLOT 2</div>
+                    <div class="box photo">PHOTO SLOT 3</div>
+                    <div class="box photo">PHOTO SLOT 4</div>
+                </div>
+            </div>
+        </section>
 
-// typewriter
-const t='Happy Birthday, Sahana 🎂', s='I made something for you. Because a normal birthday message felt too boring. 🤭';
-let i=0,j=0;
-(function a(){ if(i<t.length){title.textContent+=t[i++];setTimeout(a,55)} else b(); })();
-function b(){ if(j<s.length){subtitle.textContent+=s[j++];setTimeout(b,20)} }
+        <!-- Memories -->
+        <section>
+            <div class="card reveal">
+                <h2 style="text-align:center; margin-bottom:30px; font-size:2.2rem;">📖 Interactive Memories</h2>
+                <div class="grid">
+                    <div class="box" onclick="showStory('🏸 First Games', 'It all started with badminton. Those early rallies on court felt like the beginning of something special.')">🏸 First Games</div>
+                    <div class="box" onclick="showStory('🥤 Juice Day', 'Just one juice. Somehow became one of the most unforgettable memories.')">🥤 Juice Day</div>
+                    <div class="box" onclick="showStory('✈️ Bangalore Arc', 'Different city. Same effortless conversations. Distance couldn’t stop the vibe.')">✈️ Bangalore Arc</div>
+                    <div class="box" onclick="showStory('🎂 Birthday Radar', 'Asked randomly. Birthday was only two days away. The universe works in mysterious ways.')">🎂 Birthday Radar</div>
+                </div>
+            </div>
+        </section>
 
-function begin(){confetti();toast('Adventure Started ✨');window.scrollTo({top:innerHeight,behavior:'smooth'});}
-function nope(){joke.innerText='Too late, you are already here 🤣';setTimeout(begin,1000);}
-function story(t,c){pt.innerText=t;pc.innerText=c;popup.style.display='flex';}
-popup.onclick=()=>popup.style.display='none';
-function toast(x){toastEl=document.getElementById('toast');toastEl.innerText=x;toastEl.style.display='block';setTimeout(()=>toastEl.style.display='none',2500);}
+        <!-- Achievements -->
+        <section>
+            <div class="card reveal">
+                <h2 style="text-align:center; margin-bottom:30px; font-size:2.2rem;">🏆 Achievement System</h2>
+                <div class="grid">
+                    <div class="box" onclick="unlockAchievement(this)">🏆 Met At The Court</div>
+                    <div class="box" onclick="unlockAchievement(this)">🏆 Survived Bangalore Distance</div>
+                    <div class="box" onclick="unlockAchievement(this)">🏆 Birthday Detected</div>
+                    <div class="box" onclick="unlockAchievement(this)">🏆 Still Replies To Messages</div>
+                    <div class="box" onclick="unlockAchievement(this)">🏆 Certified Good Human</div>
+                </div>
+            </div>
+        </section>
 
-// reveal
-const obs=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('show')));
-document.querySelectorAll('.reveal').forEach(x=>obs.observe(x));
+        <!-- Final Message -->
+        <section>
+            <div class="card center reveal">
+                <h2 style="font-size:2.4rem; margin-bottom:30px; color:#c4b5fd;">💙 Final Message</h2>
+                <p style="font-size:1.35rem; line-height:1.8; max-width:700px; margin:0 auto 40px;">
+                    Thank you for being one of the nicest surprises this year.<br><br>
+                    From badminton games to random conversations, you've made life brighter.<br><br>
+                    I hope this year brings you happiness, success, amazing memories and countless reasons to smile.
+                </p>
+                <h2 style="font-size:2.8rem; background:linear-gradient(90deg, #c084fc, #f472b6); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+                    Happy Birthday, Sahana 🎂💙
+                </h2>
+            </div>
+        </section>
+    </div>
 
-// countdown
-countdown.innerHTML="🎉 Birthday Adventure Ready";
+    <!-- Popup -->
+    <div id="popup">
+        <div id="popupInner">
+            <h2 id="pt" style="margin-bottom:16px; color:#c4b5fd;"></h2>
+            <p id="pc" style="line-height:1.7; font-size:1.15rem;"></p>
+            <button onclick="closePopup()" class="btn" style="margin-top:24px;">Close</button>
+        </div>
+    </div>
 
-// confetti
-function confetti(){for(let i=0;i<70;i++){let d=document.createElement('div');d.style.cssText='position:fixed;left:'+Math.random()*100+'vw;top:0;width:8px;height:8px;background:hsl('+Math.random()*360+',100%,70%);transition:3s';document.body.appendChild(d);requestAnimationFrame(()=>{d.style.transform='translateY(100vh) rotate(720deg)';d.style.opacity='0'});setTimeout(()=>d.remove(),3000);}}
-
-// particles
-const c=document.getElementById('bg'),ctx=c.getContext('2d');function rs(){c.width=innerWidth;c.height=innerHeight}rs();onresize=rs;
-let p=[...Array(100)].map(()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1}));
-(function draw(){ctx.clearRect(0,0,c.width,c.height);ctx.fillStyle='rgba(255,255,255,.5)';p.forEach(o=>{ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,6.28);ctx.fill();o.y-=.3;if(o.y<0)o.y=c.height;});requestAnimationFrame(draw)})();
-</script>
+    <script>
+        // Typewriter
+        const titleEl = document.getElementById('title');
+        const subtitleEl = document.getElementById('subtitle');
+        const t = 'Happy Birthday, Sahana 🎂';
+        const s = "I made something for you.\nBecause a normal birthday message felt too boring. 🤭";
+        
+        let i = 0, j = 0;
+        
+        function typeTitle() {
+            if (i < t.length) {
+                titleEl.textContent += t[i++];
+                setTimeout(typeTitle, 60);
+            } else {
+                typeSubtitle();
+            }
+        }
+        
+        function typeSubtitle() {
+            if (j < s.length) {
+                subtitleEl.textContent += s[j++];
+                setTimeout(typeSubtitle, 25);
+            }
+        }
+        
+        // Start typewriter
+        setTimeout(() => {
+            typeTitle();
+        }, 800);
+        
+        // Background particles
+        const canvas = document.getElementById('bg');
+        const ctx = canvas.getContext('2d');
+        
+        let particles = [];
+        let mouseX = 0, mouseY = 0;
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speed = Math.random() * 0.6 + 0.3;
+                this.opacity = Math.random() * 0.6 + 0.3;
+                this.hue = Math.random() * 60 + 260;
+            }
+            update() {
+                this.y -= this.speed;
+                if (this.y < 0) this.reset();
+                
+                // Gentle mouse attraction
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist < 200) {
+                    this.x += dx * 0.008;
+                    this.y += dy * 0.008;
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = `hsl(${this.hue}, 90%, 85%)`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+        
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 140; i++) {
+                particles.push(new Particle());
+            }
+        }
+        
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let p of particles) {
+                p.update();
+                p.draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+        
+        // Mouse trail for shuttlecock
+        let trailElements = [];
+        function createCursorTrail() {
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                
+                const trail = document.createElement('div');
+                trail.className = 'cursor-trail';
+                trail.style.left = `${e.clientX - 12}px`;
+                trail.style.top = `${e.clientY - 12}px`;
+                trail.textContent = '🏸';
+                trail.style.fontSize = '22px';
+                document.body.appendChild(trail);
+                trailElements.push(trail);
+                
+                setTimeout(() => {
+                    trail.style.opacity = '0';
+                    trail.style.transform = 'scale(0.3)';
+                    setTimeout(() => trail.remove(), 600);
+                }, 120);
+            });
+        }
+        
+        // Confetti
+        function launchConfetti() {
+            for (let i = 0; i < 120; i++) {
+                const conf = document.createElement('div');
+                conf.style.position = 'fixed';
+                conf.style.left = Math.random() * 100 + 'vw';
+                conf.style.top = '-20px';
+                conf.style.width = '10px';
+                conf.style.height = '10px';
+                conf.style.borderRadius = '50%';
+                conf.style.background = `hsl(${Math.random()*360}, 100%, 70%)`;
+                conf.style.zIndex = '999';
+                conf.style.pointerEvents = 'none';
+                document.body.appendChild(conf);
+                
+                const angle = Math.random() * 80 - 40;
+                const duration = Math.random() * 3000 + 2500;
+                
+                conf.animate([
+                    { transform: `translateY(0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translateY(\( {window.innerHeight + 100}px) rotate( \){Math.random()*800 - 400}deg)`, opacity: 0 }
+                ], {
+                    duration: duration,
+                    easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
+                });
+                
+                setTimeout(() => conf.remove(), duration);
+            }
+        }
+        
+        // Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2800);
+        }
+        
+        // Achievement
+        function unlockAchievement(el) {
+            const toast = document.getElementById('achievementToast');
+            toast.style.display = 'flex';
+            toast.textContent = '🏆 ' + el.textContent.trim();
+            launchConfetti();
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3200);
+        }
+        
+        // Popup
+        function showStory(title, content) {
+            document.getElementById('pt').textContent = title;
+            document.getElementById('pc').textContent = content;
+            document.getElementById('popup').style.display = 'flex';
+        }
+        
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+        
+        // Adventure start
+        function beginAdventure() {
+            launchConfetti();
+            showToast('Adventure Started ✨');
+            
+            document.getElementById('transition').style.opacity = '1';
+            
+            setTimeout(() => {
+                document.getElementById('landing').style.display = 'none';
+                document.getElementById('adventure').style.display = 'block';
+                document.getElementById('transition').style.opacity = '0';
+                
+                // Reveal sections
+                setTimeout(() => {
+                    document.querySelectorAll('.reveal').forEach((el, index) => {
+                        setTimeout(() => {
+                            el.classList.add('show');
+                        }, index * 180);
+                    });
+                }, 600);
+            }, 1600);
+        }
+        
+        function nope() {
+            const joke = document.getElementById('joke');
+            joke.textContent = 'Too late, you are already here 🤣';
+            setTimeout(beginAdventure, 1400);
+        }
+        
+        // Music (placeholder)
+        let isPlaying = false;
+        const musicBtn = document.getElementById('music');
+        
+        musicBtn.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            musicBtn.textContent = isPlaying ? '⏸️ Music' : '🎵 Music';
+            showToast(isPlaying ? 'Now Playing: Birthday Vibes 🎶' : 'Music Paused');
+            // In real version: audio.play() / pause()
+        });
+        
+        // Keyboard Easter Egg
+        let konamiCode = [];
+        const secret = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight'];
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            if (konamiCode.length > secret.length) konamiCode.shift();
+            
+            if (JSON.stringify(konamiCode) === JSON.stringify(secret)) {
+                launchConfetti();
+                showToast('🏸 Secret Achievement Unlocked: Jump Smash Specialist!');
+                konamiCode = [];
+            }
+        });
+        
+        // Countdown (example)
+        function updateCountdown() {
+            const cd = document.getElementById('countdown');
+            cd.innerHTML = '🎉 Birthday Adventure Ready';
+        }
+        
+        // Initialize everything
+        window.onload = () => {
+            resizeCanvas();
+            initParticles();
+            animateParticles();
+            createCursorTrail();
+            updateCountdown();
+            
+            // Reveal landing
+            document.querySelector('#landing .reveal').classList.add('show');
+            
+            // Hide loader if any
+            console.log('%cSahana Birthday Experience Loaded ✨', 'color:#c084fc; font-size:14px;');
+        };
+    </script>
 </body>
 </html>
