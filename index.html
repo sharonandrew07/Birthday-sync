@@ -1,161 +1,94 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sahana Birthday Deluxe Edition</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sahana - Ultimate Birthday Experience</title>
 <style>
-body{margin:0;font-family:Segoe UI,sans-serif;background:linear-gradient(135deg,#07111f,#151b3a,#25134b);color:#fff;overflow-x:hidden}
-canvas{position:fixed;inset:0;z-index:-1}
-section{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
-.card{background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.15);border-radius:24px;padding:30px;max-width:950px;width:100%}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Segoe UI,sans-serif;background:linear-gradient(135deg,#050b18,#151b3a,#2b1454);color:#fff;overflow-x:hidden}
+canvas#bg{position:fixed;inset:0;z-index:-2}
+#loader{position:fixed;inset:0;background:#050b18;display:flex;align-items:center;justify-content:center;font-size:2rem;z-index:9999}
+section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.15);border-radius:24px;padding:30px;max-width:1000px;width:100%}
 .center{text-align:center}
-.btn{padding:12px 22px;border:none;border-radius:999px;background:#8b5cf6;color:#fff;cursor:pointer;margin:6px}
+.btn{padding:12px 22px;border:none;border-radius:999px;background:#8b5cf6;color:white;cursor:pointer;margin:6px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
 .box{background:rgba(255,255,255,.08);padding:16px;border-radius:16px}
-.photo{height:180px;display:flex;align-items:center;justify-content:center;border:2px dashed rgba(255,255,255,.4)}
-.hidden{display:none}
-#popup{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);align-items:center;justify-content:center;padding:20px}
+.photo{height:220px;display:flex;align-items:center;justify-content:center;border:2px dashed rgba(255,255,255,.4)}
+.reveal{opacity:0;transform:translateY(40px);transition:1s}
+.reveal.show{opacity:1;transform:none}
+#music{position:fixed;top:10px;right:10px}
+#popup{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);align-items:center;justify-content:center;padding:20px}
 #popupInner{background:#121a33;padding:24px;border-radius:18px;max-width:650px}
 .toast{display:none;position:fixed;right:20px;top:20px;background:#1f2937;padding:12px;border-radius:12px}
 </style>
 </head>
 <body>
+<div id="loader">🎬 Loading Birthday Adventure...</div>
 <canvas id="bg"></canvas>
+<button id="music" class="btn">🎵 Music Toggle</button>
 <div id="toast" class="toast"></div>
 
 <section>
-<div class="card center">
-<h1>Happy Birthday, Sahana 🎂</h1>
-<p>I made something for you.<br>Because a normal birthday message felt too boring. 🤭</p>
-<br>
-<button class="btn" onclick="startAdventure()">Begin Adventure ✨</button>
-<button class="btn" onclick="notInterested()">Not Interested 😑</button>
+<div class="card center reveal">
+<h1 id="title"></h1>
+<p id="subtitle"></p><br>
+<div id="countdown"></div><br>
+<button class="btn" onclick="begin()">Begin Adventure ✨</button>
+<button class="btn" onclick="nope()">Not Interested 😑</button>
 <p id="joke"></p>
 </div>
 </section>
 
-<section>
-<div class="card">
-<h2>📅 Origin Story</h2>
-<div class="box">🏸 Two people playing badminton.</div><br>
-<div class="box">👧 Someone asks about membership.</div><br>
-<div class="box">🧑 New teammate unlocked.</div><br>
-<div class="box">✨ And the story began.</div>
-</div>
-</section>
+<section><div class="card reveal"><h2>📅 Origin Story</h2><div class="box">🏸 Two people playing badminton.</div><br><div class="box">👧 Membership question asked.</div><br><div class="box">🧑 New teammate unlocked.</div><br><div class="box">✨ A memorable chapter began.</div></div></section>
 
-<section>
-<div class="card center">
-<h2>🎮 Player Profile</h2>
-<p>Name: Sahana</p>
-<p>Role: Unexpectedly Cool Human</p><br>
-<p>🎵 Good Music Taste</p>
-<p>🏸 Badminton Player</p>
-<p>🤭 Replies Despite Being A Dry Texter</p>
-<p>🔮 Causes Random Birthday Predictions</p><br>
-<p>Danger Level ⭐⭐⭐⭐⭐</p>
-</div>
-</section>
+<section><div class="card center reveal"><h2>🎮 Player Profile</h2><p><b>Sahana</b> — Unexpectedly Cool Human</p><br><p>🎵 Music Taste</p><p>🏸 Badminton Player</p><p>🤭 Dry Texter (Allegedly)</p><p>🔮 Birthday Prediction Catalyst</p></div></section>
 
-<section>
-<div class="card">
-<h2>📸 Memory Gallery</h2>
-<div class="grid">
-<div class="box photo">PHOTO SLOT 1</div>
-<div class="box photo">PHOTO SLOT 2</div>
-<div class="box photo">PHOTO SLOT 3</div>
-<div class="box photo">PHOTO SLOT 4</div>
-</div>
-<br>
-<div class="grid">
+<section><div class="card reveal"><h2>📸 Gallery</h2><div class="grid"><div class="box photo">PHOTO SLOT 1</div><div class="box photo">PHOTO SLOT 2</div><div class="box photo">PHOTO SLOT 3</div><div class="box photo">PHOTO SLOT 4</div></div></div></section>
+
+<section><div class="card reveal"><h2>📖 Memories</h2><div class="grid">
 <div class="box" onclick="story('🏸 First Games','It all started with badminton.')">🏸 First Games</div>
 <div class="box" onclick="story('🥤 Juice Day','One juice. One unforgettable memory.')">🥤 Juice Day</div>
 <div class="box" onclick="story('✈️ Bangalore Arc','Different city. Same conversations.')">✈️ Bangalore Arc</div>
-<div class="box" onclick="story('🎂 Birthday Radar','Asked at random. Birthday was two days away.')">🎂 Birthday Radar</div>
-</div>
-</div>
-</section>
+<div class="box" onclick="story('🎂 Birthday Radar','Asked randomly. Birthday was two days away.')">🎂 Birthday Radar</div>
+</div></div></section>
 
-<section>
-<div class="card">
-<h2>🏆 Achievements</h2>
-<div class="box">🏆 Met At The Court</div><br>
-<div class="box">🏆 Survived Bangalore Distance</div><br>
-<div class="box">🏆 Birthday Detected</div><br>
-<div class="box">🏆 Still Replies To Messages</div><br>
-<div class="box">🏆 Certified Good Human</div>
-</div>
-</section>
+<section><div class="card reveal"><h2>🏆 Achievements</h2><div class="box">🏆 Met At The Court</div><br><div class="box">🏆 Survived Bangalore Distance</div><br><div class="box">🏆 Birthday Detected</div><br><div class="box">🏆 Certified Good Human</div></div></section>
 
-<section>
-<div class="card center">
-<h2>💙 Final Message</h2>
-<p>Thank you for being one of the nicest surprises in my life this year.</p><br>
-<p>From badminton games to random conversations, you've made life a little brighter.</p><br>
-<p>I hope this year brings you happiness, success, unforgettable memories, and countless reasons to smile.</p><br>
-<h2>Happy Birthday 🎂💙</h2>
-</div>
-</section>
+<section><div class="card center reveal"><h2>💙 Final Message</h2><p>Thank you for being one of the nicest surprises this year.</p><br><p>From badminton games to random conversations, you've made life brighter.</p><br><h2>Happy Birthday, Sahana 🎂💙</h2></div></section>
 
-<div id="popup">
-<div id="popupInner">
-<h2 id="pt"></h2>
-<p id="pc"></p>
-</div>
-</div>
+<div id="popup"><div id="popupInner"><h2 id="pt"></h2><p id="pc"></p></div></div>
 
 <script>
-function startAdventure(){
-toast('Adventure Started ✨');
-confetti();
-window.scrollTo({top:window.innerHeight,behavior:'smooth'});
-}
-function notInterested(){
-document.getElementById('joke').innerText='Too late, you are already here 🤣';
-setTimeout(startAdventure,1200);
-}
-function story(t,c){
-document.getElementById('pt').innerText=t;
-document.getElementById('pc').innerText=c;
-document.getElementById('popup').style.display='flex';
-}
-document.getElementById('popup').onclick=()=>document.getElementById('popup').style.display='none';
+setTimeout(()=>document.getElementById('loader').style.display='none',1800);
 
-function toast(t){
-let x=document.getElementById('toast');
-x.innerText=t;x.style.display='block';
-setTimeout(()=>x.style.display='none',2500);
-}
-function confetti(){
-for(let i=0;i<60;i++){
-let d=document.createElement('div');
-d.style.position='fixed';
-d.style.left=Math.random()*100+'vw';
-d.style.top='0';
-d.style.width='8px';
-d.style.height='8px';
-d.style.background='hsl('+Math.random()*360+',100%,70%)';
-d.style.transition='all 3s linear';
-document.body.appendChild(d);
-requestAnimationFrame(()=>{
-d.style.transform='translateY(100vh) rotate(720deg)';
-d.style.opacity='0';
-});
-setTimeout(()=>d.remove(),3000);
-}
-}
-const c=document.getElementById('bg'),ctx=c.getContext('2d');
-function rs(){c.width=innerWidth;c.height=innerHeight}
-rs();addEventListener('resize',rs);
-let p=[...Array(80)].map(()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1}));
-(function a(){
-ctx.clearRect(0,0,c.width,c.height);
-ctx.fillStyle='rgba(255,255,255,.5)';
-p.forEach(o=>{ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,6.28);ctx.fill();o.y-=.3;if(o.y<0)o.y=c.height;});
-requestAnimationFrame(a);
-})();
+// typewriter
+const t='Happy Birthday, Sahana 🎂', s='I made something for you. Because a normal birthday message felt too boring. 🤭';
+let i=0,j=0;
+(function a(){ if(i<t.length){title.textContent+=t[i++];setTimeout(a,55)} else b(); })();
+function b(){ if(j<s.length){subtitle.textContent+=s[j++];setTimeout(b,20)} }
+
+function begin(){confetti();toast('Adventure Started ✨');window.scrollTo({top:innerHeight,behavior:'smooth'});}
+function nope(){joke.innerText='Too late, you are already here 🤣';setTimeout(begin,1000);}
+function story(t,c){pt.innerText=t;pc.innerText=c;popup.style.display='flex';}
+popup.onclick=()=>popup.style.display='none';
+function toast(x){toastEl=document.getElementById('toast');toastEl.innerText=x;toastEl.style.display='block';setTimeout(()=>toastEl.style.display='none',2500);}
+
+// reveal
+const obs=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('show')));
+document.querySelectorAll('.reveal').forEach(x=>obs.observe(x));
+
+// countdown
+countdown.innerHTML="🎉 Birthday Adventure Ready";
+
+// confetti
+function confetti(){for(let i=0;i<70;i++){let d=document.createElement('div');d.style.cssText='position:fixed;left:'+Math.random()*100+'vw;top:0;width:8px;height:8px;background:hsl('+Math.random()*360+',100%,70%);transition:3s';document.body.appendChild(d);requestAnimationFrame(()=>{d.style.transform='translateY(100vh) rotate(720deg)';d.style.opacity='0'});setTimeout(()=>d.remove(),3000);}}
+
+// particles
+const c=document.getElementById('bg'),ctx=c.getContext('2d');function rs(){c.width=innerWidth;c.height=innerHeight}rs();onresize=rs;
+let p=[...Array(100)].map(()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1}));
+(function draw(){ctx.clearRect(0,0,c.width,c.height);ctx.fillStyle='rgba(255,255,255,.5)';p.forEach(o=>{ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,6.28);ctx.fill();o.y-=.3;if(o.y<0)o.y=c.height;});requestAnimationFrame(draw)})();
 </script>
 </body>
 </html>
