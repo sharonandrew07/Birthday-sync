@@ -50,9 +50,7 @@
             background: linear-gradient(90deg, var(--purple), var(--pink));
             color: white; font-weight: 700; font-size: 1.15rem; cursor: pointer;
             margin: 12px 8px; transition: all 0.35s cubic-bezier(0.23,1,0.32,1);
-            display: none;
         }
-        .btn.show { display: inline-block; }
         .btn:hover { transform: translateY(-6px) scale(1.04); }
         
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
@@ -80,14 +78,6 @@
         .reveal.show { opacity: 1; transform: translateY(0); }
         
         #music { position: fixed; top: 24px; right: 24px; z-index: 10000; padding: 14px 24px; font-size: 1.5rem; }
-        
-        .countdown {
-            display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin: 30px 0;
-        }
-        .countdown-item {
-            background: rgba(255,255,255,0.1); padding: 16px 24px; border-radius: 16px; min-width: 100px; text-align: center;
-        }
-        .countdown-number { font-size: 2.8rem; font-weight: 700; color: #f472b6; }
         
         #popup, #secretMessage {
             display: none; position: fixed; inset: 0; background: rgba(10,15,44,0.94);
@@ -125,45 +115,112 @@
             <h1 id="title"></h1>
             <p id="subtitle" class="subtitle"></p>
             
-            <div style="margin:30px 0;">
-                <h3 style="margin-bottom:15px; color:#c4b5fd;">🎂 Birthday Countdown</h3>
-                <div id="countdown" class="countdown"></div>
-            </div>
-            
-            <button id="beginBtn" class="btn" onclick="beginAdventure()">Begin Adventure ✨</button>
-            <button id="nopeBtn" class="btn" onclick="nope()">Not Interested 😑</button>
+            <button class="btn" onclick="beginAdventure()">Begin Adventure ✨</button>
+            <button class="btn" onclick="nope()">Not Interested 😑</button>
             <p id="joke" style="margin-top:32px; min-height:32px; font-size:1.15rem; opacity:0.85;"></p>
         </div>
     </section>
 
     <!-- Adventure -->
     <div id="adventure" style="display:none;">
-        <!-- Origin, Profile, Facts, Memories, Achievements, Reasons, Final sections remain the same -->
+        <section><div class="card reveal">
+            <h2 style="text-align:center; margin-bottom:36px; font-size:2.4rem; color:#c4b5fd;">📅 Origin Story</h2>
+            <div class="grid">
+                <div class="box">🏸 Two people playing badminton</div>
+                <div class="box">👧 Membership fee question asked</div>
+                <div class="box">🧑 New teammate unlocked</div>
+                <div class="box">✨ A memorable chapter began</div>
+            </div>
+        </div></section>
 
-        <!-- Gallery with your images -->
+        <section><div class="card center reveal">
+            <h2 style="margin-bottom:32px; font-size:2.4rem;">🎮 Player Profile</h2>
+            <h3 style="font-size:2.7rem; margin-bottom:8px; color:#e0bbff;">Sahana</h3>
+            <p style="font-size:1.5rem; opacity:0.9; margin-bottom:40px;">Unexpectedly Cool Human</p>
+            <div style="max-width:560px; margin:0 auto; text-align:left;">
+                <div style="margin:18px 0;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>🎵 Music Taste</span><span>100%</span></div><div style="height:8px;background:rgba(255,255,255,0.1);border-radius:999px;overflow:hidden;"><div style="width:98%;height:100%;background:linear-gradient(90deg,#a855f7,#ec4899);"></div></div></div>
+                <div style="margin:18px 0;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>🏸 Badminton Player</span><span>94%</span></div><div style="height:8px;background:rgba(255,255,255,0.1);border-radius:999px;overflow:hidden;"><div style="width:94%;height:100%;background:linear-gradient(90deg,#a855f7,#ec4899);"></div></div></div>
+                <div style="margin:18px 0;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>🤭 Dry Texter (Allegedly)</span><span>87%</span></div><div style="height:8px;background:rgba(255,255,255,0.1);border-radius:999px;overflow:hidden;"><div style="width:87%;height:100%;background:linear-gradient(90deg,#a855f7,#ec4899);"></div></div></div>
+                <div style="margin:18px 0;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>🔮 Birthday Radar</span><span>99%</span></div><div style="height:8px;background:rgba(255,255,255,0.1);border-radius:999px;overflow:hidden;"><div style="width:99%;height:100%;background:linear-gradient(90deg,#a855f7,#ec4899);"></div></div></div>
+            </div>
+            <div style="margin-top:40px; font-size:1.45rem;">Danger Level: <span style="color:#f472b6; font-size:1.8rem;">⭐⭐⭐⭐⭐</span></div>
+        </div></section>
+
+        <section><div class="card reveal">
+            <h2 style="text-align:center; margin-bottom:36px; font-size:2.4rem; color:#c4b5fd;">📊 Sahana Facts</h2>
+            <div class="grid">
+                <div class="box">Dry texter but still replies faster than my serves 💀</div>
+                <div class="box">Can predict birthdays but can't predict when she'll smash 🔥</div>
+                <div class="box">Bangalore arc survivor 🏆 (Distance: 0, Vibe: 100)</div>
+                <div class="box">Makes ordinary juice days legendary 🥤</div>
+            </div>
+        </div></section>
+
+        <!-- Gallery -->
         <section><div class="card reveal">
             <h2 style="text-align:center; margin-bottom:36px; font-size:2.4rem;">📸 Gallery</h2>
             <div class="grid">
                 <div class="box photo">
-                    <img src="1842.jpg" alt="Slot 1">
-                    <div class="photo-label">🤣</div>
+                    <img src="1842.jpg" alt="slot1.jpg">
+                    <div class="photo-label">PHOTO SLOT 1</div>
                 </div>
                 <div class="box photo">
-                    <img src="1841.webp" alt="Slot 2">
-                    <div class="photo-label">💗</div>
+                    <img src="1841.webp" alt="slot2.jpg">
+                    <div class="photo-label">PHOTO SLOT 2</div>
                 </div>
                 <div class="box photo">
-                    <img src="1844.webp" alt="Slot 3">
-                    <div class="photo-label">🔥</div>
+                    <img src="1844.webp" alt="slot3.jpg">
+                    <div class="photo-label">PHOTO SLOT 3</div>
                 </div>
                 <div class="box photo">
-                    <img src="1843.jpg" alt="Slot 4">
-                    <div class="photo-label">💗</div>
+                    <img src="1843.jpg" alt="slot4.jpg">
+                    <div class="photo-label">PHOTO SLOT 4</div>
                 </div>
             </div>
         </div></section>
 
-        <!-- Other sections (copy from previous full code if needed) -->
+        <section><div class="card reveal">
+            <h2 style="text-align:center; margin-bottom:36px; font-size:2.4rem;">📖 Interactive Memories</h2>
+            <div class="grid">
+                <div class="box" onclick="showStory('🏸 First Games','It all started with badminton. Those early rallies felt like the beginning of something special.')">🏸 First Games</div>
+                <div class="box" onclick="showStory('🥤 Juice Day','Just one juice. Somehow it became one of the most unforgettable memories.')">🥤 Juice Day</div>
+                <div class="box" onclick="showStory('✈️ Bangalore Arc','Different city. Same effortless conversations.')">✈️ Bangalore Arc</div>
+                <div class="box" onclick="showStory('🎂 Birthday Radar','Asked randomly. Birthday was only two days away.')">🎂 Birthday Radar</div>
+            </div>
+        </div></section>
+
+        <section><div class="card reveal">
+            <h2 style="text-align:center; margin-bottom:36px; font-size:2.4rem;">🏆 Achievement System</h2>
+            <div class="grid">
+                <div class="box" data-ach="1" onclick="unlockAchievement(this); progressSecret(this)">🏆 Met At The Court <span class="hint">🏸</span></div>
+                <div class="box" data-ach="2" onclick="unlockAchievement(this)">🏆 Survived Bangalore Distance</div>
+                <div class="box" data-ach="3" onclick="unlockAchievement(this); progressSecret(this)">🏆 Birthday Detected <span class="hint">🏸</span></div>
+                <div class="box" data-ach="4" onclick="unlockAchievement(this)">🏆 Still Replies To Messages</div>
+                <div class="box" data-ach="5" onclick="unlockAchievement(this); progressSecret(this)">🏆 Certified Good Human <span class="hint">🏸</span></div>
+            </div>
+        </div></section>
+
+        <section><div class="card reveal">
+            <h2 style="text-align:center; margin-bottom:36px; font-size:2.4rem; color:#c4b5fd;">💡 Why You Made This Year Better</h2>
+            <div class="grid">
+                <div class="box">Your laugh during rallies is contagious</div>
+                <div class="box">You make silence comfortable</div>
+                <div class="box">Random deep talks at random times &gt; therapy</div>
+                <div class="box">You just... get it.</div>
+            </div>
+        </div></section>
+
+        <section><div class="card center reveal">
+            <h2 style="font-size:2.6rem; margin-bottom:32px; color:#c4b5fd;">💙 Final Message</h2>
+            <p style="font-size:1.4rem; max-width:760px; margin:0 auto 48px; line-height:1.85;">
+                Thank you for being one of the nicest surprises this year.<br><br>
+                From badminton games to random conversations, you've made life brighter.<br><br>
+                I hope this year brings you endless happiness, success, amazing memories and countless reasons to smile.
+            </p>
+            <h2 style="font-size:3rem; background:linear-gradient(90deg,#c084fc,#f472b6); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+                Happy Birthday, Sahana 🎂💙
+            </h2>
+        </div></section>
     </div>
 
     <!-- Popups -->
@@ -189,7 +246,6 @@
     </div>
 
     <script>
-        // Full script (same as previous complete version with countdown and buttons)
         let i = 0, j = 0;
         const titleEl = document.getElementById('title');
         const subtitleEl = document.getElementById('subtitle');
@@ -333,44 +389,12 @@
             }
         });
 
-        function startCountdown() {
-            const birthday = new Date("2026-06-26T00:00:00").getTime();
-            const countdownEl = document.getElementById('countdown');
-            const beginBtn = document.getElementById('beginBtn');
-            const nopeBtn = document.getElementById('nopeBtn');
-
-            setInterval(() => {
-                const now = new Date().getTime();
-                const distance = birthday - now;
-
-                if (distance < 0) {
-                    countdownEl.innerHTML = `<div style="font-size:1.8rem;color:#f472b6;">🎉 Happy Birthday Sahana! The adventure is ready!</div>`;
-                    beginBtn.classList.add('show');
-                    nopeBtn.classList.add('show');
-                    return;
-                }
-
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                countdownEl.innerHTML = `
-                    <div class="countdown-item"><div class="countdown-number">${days}</div><small>Days</small></div>
-                    <div class="countdown-item"><div class="countdown-number">${hours}</div><small>Hours</small></div>
-                    <div class="countdown-item"><div class="countdown-number">${minutes}</div><small>Minutes</small></div>
-                    <div class="countdown-item"><div class="countdown-number">${seconds}</div><small>Seconds</small></div>
-                `;
-            }, 1000);
-        }
-
         window.onload = () => {
             resize();
             initParticles();
             animate();
             typeTitle();
             document.querySelector('#landing .reveal').classList.add('show');
-            startCountdown();
         };
 
         window.addEventListener('resize', () => { resize(); initParticles(); });
