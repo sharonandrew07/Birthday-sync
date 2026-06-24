@@ -50,7 +50,9 @@
             background: linear-gradient(90deg, var(--purple), var(--pink));
             color: white; font-weight: 700; font-size: 1.15rem; cursor: pointer;
             margin: 12px 8px; transition: all 0.35s cubic-bezier(0.23,1,0.32,1);
+            display: none;
         }
+        .btn.show { display: inline-block; }
         .btn:hover { transform: translateY(-6px) scale(1.04); }
         
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
@@ -78,6 +80,14 @@
         .reveal.show { opacity: 1; transform: translateY(0); }
         
         #music { position: fixed; top: 24px; right: 24px; z-index: 10000; padding: 14px 24px; font-size: 1.5rem; }
+        
+        .countdown {
+            display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin: 30px 0;
+        }
+        .countdown-item {
+            background: rgba(255,255,255,0.1); padding: 16px 24px; border-radius: 16px; min-width: 100px; text-align: center;
+        }
+        .countdown-number { font-size: 2.8rem; font-weight: 700; color: #f472b6; }
         
         #popup, #secretMessage {
             display: none; position: fixed; inset: 0; background: rgba(10,15,44,0.94);
@@ -115,8 +125,13 @@
             <h1 id="title"></h1>
             <p id="subtitle" class="subtitle"></p>
             
-            <button class="btn" onclick="beginAdventure()">Begin Adventure ✨</button>
-            <button class="btn" onclick="nope()">Not Interested 😑</button>
+            <div style="margin:30px 0;">
+                <h3 style="margin-bottom:15px; color:#c4b5fd;">🎂 Birthday Countdown</h3>
+                <div id="countdown" class="countdown"></div>
+            </div>
+            
+            <button id="beginBtn" class="btn" onclick="beginAdventure()">Begin Adventure ✨</button>
+            <button id="nopeBtn" class="btn" onclick="nope()">Not Interested 😑</button>
             <p id="joke" style="margin-top:32px; min-height:32px; font-size:1.15rem; opacity:0.85;"></p>
         </div>
     </section>
@@ -161,19 +176,19 @@
             <h2 style="text-align:center; margin-bottom:36px; font-size:2.4rem;">📸 Gallery</h2>
             <div class="grid">
                 <div class="box photo">
-                    <img src="1842.jpg" alt="slot1.jpg">
+                    <img src="1842.jpg" alt="Photo Slot 1">
                     <div class="photo-label">🤭</div>
                 </div>
                 <div class="box photo">
-                    <img src="1841.webp" alt="slot2.jpg">
+                    <img src="1841.webp" alt="Photo Slot 2">
                     <div class="photo-label">💗</div>
                 </div>
                 <div class="box photo">
-                    <img src="1844.webp" alt="slot3.jpg">
+                    <img src="1844.webp" alt="Photo Slot 3">
                     <div class="photo-label">🔥</div>
                 </div>
                 <div class="box photo">
-                    <img src="1843.jpg" alt="slot4.jpg">
+                    <img src="1843.jpg" alt="Photo Slot 4">
                     <div class="photo-label">❣️</div>
                 </div>
             </div>
@@ -389,12 +404,45 @@
             }
         });
 
+        // Countdown Timer - June 26, 2026 12:00 AM
+        function startCountdown() {
+            const birthday = new Date("2026-06-26T00:00:00").getTime();
+            const countdownEl = document.getElementById('countdown');
+            const beginBtn = document.getElementById('beginBtn');
+            const nopeBtn = document.getElementById('nopeBtn');
+
+            setInterval(() => {
+                const now = new Date().getTime();
+                const distance = birthday - now;
+
+                if (distance < 0) {
+                    countdownEl.innerHTML = `<div style="font-size:1.8rem;color:#f472b6;">🎉 Happy Birthday Sahana! The adventure is ready!</div>`;
+                    beginBtn.classList.add('show');
+                    nopeBtn.classList.add('show');
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdownEl.innerHTML = `
+                    <div class="countdown-item"><div class="countdown-number">${days}</div><small>Days</small></div>
+                    <div class="countdown-item"><div class="countdown-number">${hours}</div><small>Hours</small></div>
+                    <div class="countdown-item"><div class="countdown-number">${minutes}</div><small>Minutes</small></div>
+                    <div class="countdown-item"><div class="countdown-number">${seconds}</div><small>Seconds</small></div>
+                `;
+            }, 1000);
+        }
+
         window.onload = () => {
             resize();
             initParticles();
             animate();
             typeTitle();
             document.querySelector('#landing .reveal').classList.add('show');
+            startCountdown();
         };
 
         window.addEventListener('resize', () => { resize(); initParticles(); });
