@@ -72,6 +72,14 @@
         
         #music { position: fixed; top: 24px; right: 24px; z-index: 10000; padding: 14px 24px; font-size: 1.5rem; }
         
+        .countdown {
+            display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin: 30px 0;
+        }
+        .countdown-item {
+            background: rgba(255,255,255,0.1); padding: 16px 24px; border-radius: 16px; min-width: 100px; text-align: center;
+        }
+        .countdown-number { font-size: 2.8rem; font-weight: 700; color: #f472b6; }
+        
         #popup, #secretMessage {
             display: none; position: fixed; inset: 0; background: rgba(10,15,44,0.94);
             align-items: center; justify-content: center; z-index: 20000; backdrop-filter: blur(12px);
@@ -98,12 +106,23 @@
     <div id="toast" class="toast"></div>
     <div id="achievementToast" class="achievement-unlock"></div>
 
+    <!-- Audio Player -->
+    <audio id="birthdaySong" loop>
+        <source src="all-falls-down.mp3" type="audio/mpeg"> <!-- Change filename here -->
+    </audio>
+
     <!-- Landing -->
     <section id="landing">
         <div class="card center reveal">
             <h1 id="title"></h1>
             <p id="subtitle" class="subtitle"></p>
-            <div id="countdown" style="font-size:1.4rem; margin:32px 0 20px; opacity:0.9;"></div>
+            
+            <!-- Interactive Countdown -->
+            <div style="margin:30px 0;">
+                <h3 style="margin-bottom:15px; color:#c4b5fd;">🎂 Birthday Countdown</h3>
+                <div id="countdown" class="countdown"></div>
+            </div>
+            
             <button class="btn" onclick="beginAdventure()">Begin Adventure ✨</button>
             <button class="btn" onclick="nope()">Not Interested 😑</button>
             <p id="joke" style="margin-top:32px; min-height:32px; font-size:1.15rem; opacity:0.85;"></p>
@@ -112,7 +131,6 @@
 
     <!-- Adventure -->
     <div id="adventure" style="display:none;">
-        <!-- Origin, Profile, Facts, Gallery, Memories sections same as before -->
         <section><div class="card reveal">
             <h2 style="text-align:center; margin-bottom:36px; font-size:2.4rem; color:#c4b5fd;">📅 Origin Story</h2>
             <div class="grid">
@@ -149,7 +167,7 @@
         <section><div class="card reveal">
             <h2 style="text-align:center; margin-bottom:36px; font-size:2.4rem;">📸 Gallery</h2>
             <div class="grid">
-                <div class="box photo">¿Cuántos años tienes_(WEBP).webp</div>
+                <div class="box photo">PHOTO SLOT 1</div>
                 <div class="box photo">PHOTO SLOT 2</div>
                 <div class="box photo">PHOTO SLOT 3</div>
                 <div class="box photo">PHOTO SLOT 4</div>
@@ -166,7 +184,6 @@
             </div>
         </div></section>
 
-        <!-- Achievements -->
         <section><div class="card reveal">
             <h2 style="text-align:center; margin-bottom:36px; font-size:2.4rem;">🏆 Achievement System</h2>
             <div class="grid">
@@ -302,46 +319,33 @@
             setTimeout(() => toast.style.display = 'none', 3000);
         }
 
-        // Fixed Secret Logic
         let secretProgress = [];
         function progressSecret(el) {
             const ach = el.getAttribute('data-ach');
             if (!ach) return;
-
             secretProgress.push(ach);
-
-            // Only check when we have enough clicks
             if (secretProgress.length >= 3) {
                 const lastThree = secretProgress.slice(-3);
                 if (JSON.stringify(lastThree) === JSON.stringify(['1','3','5'])) {
-                    // Sequence completed → now count extra clicks on 5
-                    const fiveCount = secretProgress.filter(x => x === '5').length;
-                    if (fiveCount >= 4) {   // 1 from sequence + 3 extra
+                    if (secretProgress.filter(x => x === '5').length >= 4) {
                         document.getElementById('secretMessage').style.display = 'flex';
-                        launchConfetti();
-                        launchConfetti();
-                        secretProgress = []; // reset
+                        launchConfetti(); launchConfetti();
+                        secretProgress = [];
                         document.querySelectorAll('.hint').forEach(h => h.classList.add('revealed'));
                     }
                 } else if (secretProgress.length > 10) {
-                    secretProgress = []; // reset on wrong attempts
+                    secretProgress = [];
                 }
             }
         }
 
-        function closeSecret() { 
-            document.getElementById('secretMessage').style.display = 'none'; 
-        }
-
+        function closeSecret() { document.getElementById('secretMessage').style.display = 'none'; }
         function showStory(title, content) {
             document.getElementById('pt').textContent = title;
             document.getElementById('pc').textContent = content;
             document.getElementById('popup').style.display = 'flex';
         }
-
-        function closePopup() { 
-            document.getElementById('popup').style.display = 'none'; 
-        }
+        function closePopup() { document.getElementById('popup').style.display = 'none'; }
 
         function beginAdventure() {
             launchConfetti();
@@ -365,26 +369,61 @@
             setTimeout(beginAdventure, 1300);
         }
 
+        // Music
+        const audio = document.getElementById('birthdaySong');
         let isPlaying = false;
         document.getElementById('music').addEventListener('click', () => {
             isPlaying = !isPlaying;
-            document.getElementById('music').textContent = isPlaying ? '⏸️ Music' : '🎵 Music';
-            showToast(isPlaying ? 'All Falls Down — Kanye West 🎶' : 'Music Paused');
+            if (isPlaying) {
+                audio.play().catch(() => {});
+                document.getElementById('music').textContent = '⏸️ Music';
+                showToast('All Falls Down — Kanye West 🎶');
+            } else {
+                audio.pause();
+                document.getElementById('music').textContent = '🎵 Music';
+                showToast('Music Paused');
+            }
         });
 
+        // Countdown Timer
+        function startCountdown() {
+            const birthday = new Date("2026-07-01T00:00:00").getTime(); // ← Change to Sahana's actual birthday
+            const countdownEl = document.getElementById('countdown');
+
+            setInterval(() => {
+                const now = new Date().getTime();
+                const distance = birthday - now;
+
+                if (distance < 0) {
+                    countdownEl.innerHTML = `<div style="font-size:1.8rem;color:#f472b6;">Mission Completed 🎉 Happy Birthday Sahana!</div>`;
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdownEl.innerHTML = `
+                    <div class="countdown-item"><div class="countdown-number">${days}</div><small>Days</small></div>
+                    <div class="countdown-item"><div class="countdown-number">${hours}</div><small>Hours</small></div>
+                    <div class="countdown-item"><div class="countdown-number">${minutes}</div><small>Minutes</small></div>
+                    <div class="countdown-item"><div class="countdown-number">${seconds}</div><small>Seconds</small></div>
+                `;
+            }, 1000);
+        }
+
+        // Initialize
         window.onload = () => {
             resize();
             initParticles();
             animate();
             typeTitle();
             document.querySelector('#landing .reveal').classList.add('show');
-            document.getElementById('countdown').innerHTML = '🎉 Birthday Adventure Ready';
+            startCountdown();
         };
 
-          window.addEventListener('resize', () => { 
-            resize(); 
-            initParticles(); 
-        });
+        window.addEventListener('resize', () => { resize(); initParticles(); });
     </script>
 </body>
 </html>
