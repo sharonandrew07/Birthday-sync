@@ -50,7 +50,9 @@
             background: linear-gradient(90deg, var(--purple), var(--pink));
             color: white; font-weight: 700; font-size: 1.15rem; cursor: pointer;
             margin: 12px 8px; transition: all 0.35s cubic-bezier(0.23,1,0.32,1);
+            display: none;
         }
+        .btn.show { display: inline-block; }
         .btn:hover { transform: translateY(-6px) scale(1.04); }
         
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
@@ -61,6 +63,9 @@
             position: relative;
         }
         .box:hover { transform: translateY(-12px) scale(1.02); border-color: var(--pink); }
+        
+        .photo { height: 280px; border-radius: 20px; overflow: hidden; }
+        .photo img { width: 100%; height: 100%; object-fit: cover; }
         
         .hint { position: absolute; top: 12px; right: 12px; font-size: 18px; opacity: 0.15; transition: all 0.4s; pointer-events: none; }
         .box:hover .hint { opacity: 0.45; }
@@ -79,24 +84,6 @@
             background: rgba(255,255,255,0.1); padding: 16px 24px; border-radius: 16px; min-width: 100px; text-align: center;
         }
         .countdown-number { font-size: 2.8rem; font-weight: 700; color: #f472b6; }
-        
-        #popup, #secretMessage {
-            display: none; position: fixed; inset: 0; background: rgba(10,15,44,0.94);
-            align-items: center; justify-content: center; z-index: 20000; backdrop-filter: blur(12px);
-        }
-        
-        #popupInner, #secretInner {
-            background: #121a38; padding: 48px 40px; border-radius: 28px;
-            max-width: 640px; width: 90%; border: 1px solid var(--purple);
-            box-shadow: 0 0 80px rgba(139,92,246,0.6); text-align: center;
-        }
-        
-        .toast, .achievement-unlock {
-            position: fixed; padding: 18px 28px; border-radius: 20px;
-            font-weight: 600; z-index: 30000; display: none;
-        }
-        .toast { right: 24px; top: 24px; background: rgba(30,41,59,0.95); border-left: 6px solid var(--pink); }
-        .achievement-unlock { left: 50%; bottom: 40px; transform: translateX(-50%); background: linear-gradient(90deg, var(--purple), #d946ef); }
     </style>
 </head>
 <body>
@@ -106,9 +93,8 @@
     <div id="toast" class="toast"></div>
     <div id="achievementToast" class="achievement-unlock"></div>
 
-    <!-- Audio Player -->
     <audio id="birthdaySong" loop>
-        <source src="All Falls Down(MP3_320K).mp3" type="audio/mpeg"> <!-- Change filename here -->
+        <source src="all-falls-down.mp3" type="audio/mpeg">
     </audio>
 
     <!-- Landing -->
@@ -117,14 +103,13 @@
             <h1 id="title"></h1>
             <p id="subtitle" class="subtitle"></p>
             
-            <!-- Interactive Countdown -->
             <div style="margin:30px 0;">
                 <h3 style="margin-bottom:15px; color:#c4b5fd;">🎂 Birthday Countdown</h3>
                 <div id="countdown" class="countdown"></div>
             </div>
             
-            <button class="btn" onclick="beginAdventure()">Begin Adventure ✨</button>
-            <button class="btn" onclick="nope()">Not Interested 😑</button>
+            <button id="beginBtn" class="btn" onclick="beginAdventure()">Begin Adventure ✨</button>
+            <button id="nopeBtn" class="btn" onclick="nope()">Not Interested 😑</button>
             <p id="joke" style="margin-top:32px; min-height:32px; font-size:1.15rem; opacity:0.85;"></p>
         </div>
     </section>
@@ -164,13 +149,14 @@
             </div>
         </div></section>
 
+        <!-- Gallery with your images -->
         <section><div class="card reveal">
             <h2 style="text-align:center; margin-bottom:36px; font-size:2.4rem;">📸 Gallery</h2>
             <div class="grid">
-                <div class="box photo">PHOTO SLOT 1</div>
-                <div class="box photo">PHOTO SLOT 2</div>
-                <div class="box photo">PHOTO SLOT 3</div>
-                <div class="box photo">PHOTO SLOT 4</div>
+                <div class="box photo"><img src="1842.jpg" alt="Slot 1"></div>
+                <div class="box photo"><img src="1841.webp" alt="Slot 2"></div>
+                <div class="box photo"><img src="1844.webp" alt="Slot 3"></div>
+                <div class="box photo"><img src="1843.jpg" alt="Slot 4"></div>
             </div>
         </div></section>
 
@@ -369,7 +355,6 @@
             setTimeout(beginAdventure, 1300);
         }
 
-        // Music
         const audio = document.getElementById('birthdaySong');
         let isPlaying = false;
         document.getElementById('music').addEventListener('click', () => {
@@ -385,17 +370,20 @@
             }
         });
 
-        // Countdown Timer
         function startCountdown() {
-            const birthday = new Date("2026-06-27T00:00:00").getTime(); // ← Change to Sahana's actual birthday
+            const birthday = new Date("2026-06-26T00:00:00").getTime();
             const countdownEl = document.getElementById('countdown');
+            const beginBtn = document.getElementById('beginBtn');
+            const nopeBtn = document.getElementById('nopeBtn');
 
             setInterval(() => {
                 const now = new Date().getTime();
                 const distance = birthday - now;
 
-                if (distance < 0) {
-                    countdownEl.innerHTML = `<div style="font-size:1.8rem;color:#f472b6;">Mission Completed 🎉 Happy Birthday Sahana!</div>`;
+              if (distance < 0) {
+                    countdownEl.innerHTML = `<div style="font-size:1.8rem;color:#f472b6;">🎉 Happy Birthday Sahana! The adventure is ready!</div>`;
+                    beginBtn.classList.add('show');
+                    nopeBtn.classList.add('show');
                     return;
                 }
 
@@ -413,7 +401,6 @@
             }, 1000);
         }
 
-        // Initialize
         window.onload = () => {
             resize();
             initParticles();
